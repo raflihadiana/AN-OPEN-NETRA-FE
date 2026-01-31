@@ -10,7 +10,7 @@ import store from "./state/store";
 import BootstrapVueNext from 'bootstrap-vue-next';
 import vClickOutside from "click-outside-vue3";
 import VueApexCharts from "vue3-apexcharts";
-import Maska from 'maska';''
+import Maska from 'maska'; ''
 
 import VueFeather from 'vue-feather';
 
@@ -20,8 +20,8 @@ import '@/assets/scss/mermaid.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle'
 
 // FakeBackend authentication
-// import { configureFakeBackend } from './helpers/fake-backend';
-// configureFakeBackend();
+import { configureFakeBackend } from './helpers/fake-backend';
+configureFakeBackend();
 
 
 // Firebase authentication

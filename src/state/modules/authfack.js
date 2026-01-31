@@ -12,7 +12,7 @@ export const actions = {
     login({ dispatch, commit }, { email, password }) {
         commit('loginRequest', { email });
 
-        userService.login(email, password)
+        return userService.login(email, password)
             .then(
                 user => {
                     commit('loginSuccess', user);
@@ -21,6 +21,7 @@ export const actions = {
                 error => {
                     commit('loginFailure', error);
                     dispatch('notification/error', error, { root: true });
+                    throw error; // Re-throw to let component handle it
                 }
             );
     },

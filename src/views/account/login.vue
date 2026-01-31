@@ -23,6 +23,7 @@ export default {
       tryingToLogIn: false,
       isAuthError: false,
       processing: false,
+      passwordFieldType: "password",
     };
   },
   validations: {
@@ -40,7 +41,13 @@ export default {
   methods: {
     ...authMethods,
     ...authFackMethods,
+    ...authFackMethods,
     ...notificationMethods,
+
+    togglePassword() {
+      this.passwordFieldType =
+        this.passwordFieldType === "password" ? "text" : "password";
+    },
 
     async signinapi() {
       this.processing = true;
@@ -99,7 +106,17 @@ export default {
             this.login({
               email,
               password,
-            });
+            })
+              .then(() => {
+                 // Success is handled in action (redirects)
+                 // But we should reset processing just in case
+                 this.processing = false;
+              })
+              .catch((error) => {
+                this.processing = false;
+                this.authError = error;
+                this.isAuthError = true;
+              });
           }
         } else if (process.env.VUE_APP_DEFAULT_AUTH === "authapi") {
           axios
@@ -210,12 +227,12 @@ export default {
 
                                                   <label class="form-label" for="password-input">Password</label>
                                                   <div class="position-relative auth-pass-inputgroup mb-3">
-                                                      <input type="password" v-model="password"
+                                                  <input :type="passwordFieldType" v-model="password"
                                                           class="form-control pe-5" placeholder="Enter password"
                                                           id="password-input" />  
                                                       <BButton variant="link"
                                                           class="position-absolute end-0 top-0 text-decoration-none text-muted"
-                                                          type="button" id="password-addon">
+                                                          type="button" id="password-addon" @click="togglePassword">
                                                           <i class="ri-eye-fill align-middle"></i>
                                                       </BButton>
                                                       <div class="invalid-feedback">
@@ -232,7 +249,7 @@ export default {
                                               </div>
 
                                               <div class="mt-4">
-                                                  <BButton variant="success" class="w-100" type="submit" @click="signinapi" :disabled="processing">
+                                                  <BButton variant="success" class="w-100" type="submit" :disabled="processing">
                                                     {{ processing ? "Please wait" : "Sign In" }}
                                                   </BButton>
                                               </div>
